@@ -11,8 +11,6 @@ const WritingFlowPage = () => {
 
   const { text, wordCount, speed, isTyping, handleChange, handleReset } = useTypingSpeed();
 
-
-
   return (
     <WritingContainer textLength={text.length}>
       <ThemeSwitcher />
