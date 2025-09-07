@@ -9,7 +9,6 @@ const ThemeSwitcher = () => {
   const toggleTheme = () => setTheme(theme === "dark" ? "light" : "dark");
 
   return (
-    <div className="absolute top-6 right-6 z-10">
       <button
         onClick={toggleTheme}
         aria-label="Toggle theme"
@@ -17,7 +16,6 @@ const ThemeSwitcher = () => {
       >
         {theme === "dark" ? <FiSun size={18} /> : <FiMoon size={18} />}
       </button>
-    </div>
   );
 };
 
