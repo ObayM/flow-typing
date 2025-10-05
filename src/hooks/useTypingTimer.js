@@ -29,5 +29,5 @@ export function useTypingTimer(inactivityDelay = 10000) {
     }, inactivityDelay);
   };
   
-  return { timer, handleTyping };
+  return { timer, handleTyping, isActive };
 }

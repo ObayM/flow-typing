@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import WritingContainer from "@/components/WritingContainer";
 import ThemeSwitcher from "@/components//ThemeSwitcher";
 import WritingArea from "@/components//WritingArea";
@@ -12,7 +12,30 @@ import { useTypingTimer } from "@/hooks/useTypingTimer";
 const WritingFlowPage = () => {
   const { text, wordCount, speed, isTyping, handleChange, handleReset } = useTypingSpeed();
   
-  const { timer, handleTyping: handleTimerTyping } = useTypingTimer(10000); 
+  const { timer, handleTyping: handleTimerTyping, isActive } = useTypingTimer(10000); 
+  const [writeOrDieMode, setWriteOrDieMode] = useState(false);
+
+  const handleWriteOrDieToggle = () => {
+    setWriteOrDieMode(!writeOrDieMode);
+  };
+
+
+  useEffect(() => {
+    if (writeOrDieMode) {
+      const timer = setTimeout(() => {
+        setWriteOrDieMode(false);
+      }, .5 * 60 * 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [writeOrDieMode]); 
+
+  useEffect(() => {
+    if (writeOrDieMode && !isActive) {
+      handleReset();
+    }
+  }, [isActive, writeOrDieMode, handleReset]);
+
 
 
   const handleTextChange = (e) => {
@@ -28,6 +51,8 @@ const WritingFlowPage = () => {
         speed={speed}
         handleReset={handleReset}
         timer={timer} 
+        handleWriteOrDieToggle={handleWriteOrDieToggle}
+        writeOrDieMode={writeOrDieMode}
       />
 
       <WritingArea

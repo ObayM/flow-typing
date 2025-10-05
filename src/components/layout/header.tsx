@@ -12,10 +12,12 @@ type HeaderProps = {
   speed: number;
   timer: number;
   handleReset: () => void;
+  handleWriteOrDieToggle: () => void;
+  writeOrDieMode: boolean;
 };
 
 
-export default function Header({ isTyping, wordCount, speed, timer, handleReset }: HeaderProps) {
+export default function Header({ isTyping, wordCount, speed, timer, handleReset, handleWriteOrDieToggle, writeOrDieMode}: HeaderProps) {
   return (
     <motion.header
       className="absolute top-0 left-0 right-0 z-10 p-4"
@@ -31,10 +33,15 @@ export default function Header({ isTyping, wordCount, speed, timer, handleReset 
           Flow
         </h1>
 
-        <Switch isOn={true} handleToggle={() => {}} onColor="bg-green-500"  />
-        <WordCount count={wordCount} speed={speed} />
-        <span className="text-sm text-gray-500 dark:text-gray-400">{timer}s</span>
+        <button onClick={handleWriteOrDieToggle} 
+          className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
+        >
+          {writeOrDieMode ? "Stop " : "Start "}
+          Write OR Die
 
+        </button>
+        <span className="text-sm text-gray-500 dark:text-gray-400">{timer}s</span>
+        
         <ThemeSwitcher />
         <button className=" " onClick={handleReset}><IoCreateOutline /></button>
       </div>
