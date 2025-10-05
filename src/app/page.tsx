@@ -10,6 +10,8 @@ import { useTypingTimer } from "@/hooks/useTypingTimer";
 import WriteOrDieProgressBar from "@/components/WriteOrDieProgressBar";
 import { supabase } from "@/lib/supabase";
 
+import SettingsModal from "@/components/SettingsModal";
+
 const WritingFlowPage: FC = () => {
   const [config, setConfig] = useState<{ preDelete: number; duration: number } | null>(null)
 
@@ -92,6 +94,7 @@ const WritingFlowPage: FC = () => {
         text={text}
         handleChange={handleTextChange}
       />
+      <SettingsModal />
     </WritingContainer>
   );
 };

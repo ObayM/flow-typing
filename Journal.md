@@ -54,3 +54,6 @@ create table configs (
 );
 
 finally the writeOrDie mode is working perfectly fine and everything si going great and added suapbase 
+
+okay awesome, i think i'll be doing something like creating the settings Modal and it would only works if you logged in ,so i'll try to 
+actually do the auth and also the settings modal and save it to local storage ig but just let's get it done
