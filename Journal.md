@@ -15,6 +15,11 @@ TODO:
 Next is the visual effects and code cleaning and organizing, it's pretty messy here 
 
 
-git add .
-git commit -m "Added the write or die mode which if it's activated you have to type for 10 minutes without stopping for more than 10 seconds, that forces you to get into the flow state"
-git push
+-- oh no i've been playing with styles for 10m , next is i think a progress bar for the time remaining in the WriteOrDie mode
+
+okay the progress bar is working completely fine but the code is REALLY really a big mess so i need to do some cleaning tho
+
+okay now let's see i'll be doing something like a landing page , explaining the website and the idea behind it 
+
+it's working great now but need lots and lots of edits but it's not buggy at least
+

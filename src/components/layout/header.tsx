@@ -17,6 +17,7 @@ type HeaderProps = {
 };
 
 
+
 export default function Header({ isTyping, wordCount, speed, timer, handleReset, handleWriteOrDieToggle, writeOrDieMode}: HeaderProps) {
   return (
     <motion.header
@@ -34,7 +35,7 @@ export default function Header({ isTyping, wordCount, speed, timer, handleReset,
         </h1>
 
         <button onClick={handleWriteOrDieToggle} 
-          className="text-sm text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-600 dark:hover:text-gray-300"
+          className={`text-sm text-gray-500 dark:text-gray-400 cursor-pointer hover:text-gray-600 rounded-xl p-2 dark:hover:text-gray-300 transition-all duration-300 ${writeOrDieMode ? ' dark:bg-stone-900 bg-green-50' : ''}`}
         >
           {writeOrDieMode ? "Stop " : "Start "}
           Write OR Die
@@ -48,3 +49,5 @@ export default function Header({ isTyping, wordCount, speed, timer, handleReset,
     </motion.header>
   );
 }
+
+

@@ -8,6 +8,7 @@ import WordCount from "@/components//WordCount";
 import useTypingSpeed from "@/hooks/useTypingSpeed";
 import Header from "@/components/layout/header";
 import { useTypingTimer } from "@/hooks/useTypingTimer"; 
+import WriteOrDieProgressBar from "@/components/WriteOrDieProgressBar";
 
 const WritingFlowPage = () => {
   const { text, wordCount, speed, isTyping, handleChange, handleReset } = useTypingSpeed();
@@ -44,7 +45,16 @@ const WritingFlowPage = () => {
   };
 
   return (
+
     <WritingContainer textLength={text.length}>
+          <WriteOrDieProgressBar
+      duration={.5*60}
+      height="6px"
+      showTime={true}
+      StartOn={writeOrDieMode}
+      StopOn={!writeOrDieMode}
+     
+    />
       <Header
         isTyping={isTyping}
         wordCount={wordCount}
