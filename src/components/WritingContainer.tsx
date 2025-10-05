@@ -29,3 +29,4 @@ const WritingContainer = ({ children, textLength }: WritingContainerProps) => {
 };
 
 export default WritingContainer;
+

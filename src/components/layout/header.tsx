@@ -50,4 +50,3 @@ export default function Header({ isTyping, wordCount, speed, timer, handleReset,
   );
 }
 
-

@@ -15,3 +15,4 @@ const WordCount = ({ count, speed }: WordCountProps) => {
 };
 
 export default WordCount;
+

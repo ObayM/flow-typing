@@ -31,3 +31,5 @@ i am tirrble in  choosing colors but i hope that everything works
 
 it's pretty much done
 
+okay now i'll be working on converting all of this js to ts and i'll try to move and organize things as i think it's pretty bad here
+

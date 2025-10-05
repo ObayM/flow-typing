@@ -3,7 +3,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTimer } from "./useTimer"; 
 
-
 const WriteOrDieProgressBar = ({
   duration = 10,
   isRunning = false,
@@ -26,7 +25,6 @@ const WriteOrDieProgressBar = ({
           backgroundColor: color,
           height: height,
         }}
-
         animate={{ width: `${progress}%` }}
 
         transition={{ ease: "linear", duration: 0.05 }}
@@ -41,3 +39,4 @@ const WriteOrDieProgressBar = ({
 };
 
 export default WriteOrDieProgressBar;
+

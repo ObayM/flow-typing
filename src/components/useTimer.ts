@@ -1,28 +1,51 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-export const useTimer = ({ duration = 10, isRunning = false, onComplete }) => {
-  const [progress, setProgress] = useState(0);
-  const [remaining, setRemaining] = useState(duration);
+interface UseTimerProps {
+  duration?: number;
+  isRunning?: boolean;
+  onComplete?: () => void; 
+}
 
-  const animationFrameRef = useRef(null);
-  const startTimeRef = useRef(null);
-  const elapsedBeforePauseRef = useRef(0);
+
+interface UseTimerReturn {
+  progress: number;
+  remaining: string; 
+  
+}
+
+
+export const useTimer = ({
+  duration = 10,
+  isRunning = false,
+  onComplete,
+}: UseTimerProps): UseTimerReturn => {
+
+  const [progress, setProgress] = useState<number>(0);
+  const [remaining, setRemaining] = useState<number>(duration);
+
+
+  const animationFrameRef = useRef<number | null>(null);
+
+  const startTimeRef = useRef<number | null>(null);
+  const elapsedBeforePauseRef = useRef<number>(0);
+
 
   const resetTimer = useCallback(() => {
-    cancelAnimationFrame(animationFrameRef.current);
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+    }
     setProgress(0);
-
     setRemaining(duration);
     startTimeRef.current = null;
     elapsedBeforePauseRef.current = 0;
   }, [duration]);
 
   useEffect(() => {
-
     const update = () => {
+      if (startTimeRef.current === null) return;
 
-        const now = Date.now();
+      const now = Date.now();
       const elapsed = (now - startTimeRef.current) / 1000 + elapsedBeforePauseRef.current;
       
       if (elapsed < duration) {
@@ -31,7 +54,6 @@ export const useTimer = ({ duration = 10, isRunning = false, onComplete }) => {
         setRemaining(Math.max(duration - elapsed, 0));
         animationFrameRef.current = requestAnimationFrame(update);
       } else {
-
         setProgress(100);
         setRemaining(0);
         if (onComplete) {
@@ -44,19 +66,28 @@ export const useTimer = ({ duration = 10, isRunning = false, onComplete }) => {
 
     if (isRunning) {
 
-        startTimeRef.current = Date.now();
+      if (startTimeRef.current === null) {
+          startTimeRef.current = Date.now();
+      }
       animationFrameRef.current = requestAnimationFrame(update);
     } else {
 
+      if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+      }
 
-        if (startTimeRef.current) {
+      if (startTimeRef.current) {
         const elapsedSinceLastStart = (Date.now() - startTimeRef.current) / 1000;
         elapsedBeforePauseRef.current += elapsedSinceLastStart;
+        startTimeRef.current = null;
       }
     }
 
-    return () => cancelAnimationFrame(animationFrameRef.current);
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
 
   }, [isRunning, duration, onComplete, resetTimer]);
   
@@ -64,7 +95,5 @@ export const useTimer = ({ duration = 10, isRunning = false, onComplete }) => {
     resetTimer();
   }, [duration, resetTimer]);
 
-
   return { progress, remaining: remaining.toFixed(1) };
 };
-

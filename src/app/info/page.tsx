@@ -1,36 +1,47 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { FaMoon, FaFeather  } from "react-icons/fa";
+import React, { useState, useEffect, useRef, ReactNode, FC } from 'react';
+import { FaMoon, FaFeather } from "react-icons/fa";
 import { GiDeathZone } from "react-icons/gi";
 import { IoStatsChartOutline } from "react-icons/io5";
 
 import Link from 'next/link';
 
-const Section = ({ children, className = '' }) => {
-  const sectionRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
+interface SectionProps {
+  children: ReactNode;
+  className?: string; 
+}
+
+const Section: FC<SectionProps> = ({ children, className = '' }) => {
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
+    const currentRef = sectionRef.current;
+
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries: IntersectionObserverEntry[]) => {
+
         if (entries[0].isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(sectionRef.current);
+          if (currentRef) {
+            observer.unobserve(currentRef);
+          }
         }
       },
       { threshold: 0.1 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    if (currentRef) {
+      observer.observe(currentRef);
     }
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
-  }, []);
+  }, []); 
 
   return (
     <section
@@ -45,9 +56,14 @@ const Section = ({ children, className = '' }) => {
 };
 
 
+interface Feature {
+  icon: ReactNode;
+  title: string;
+  description: string;
+}
 
 export default function LandingPage() {
-  const features = [
+  const features: Feature[] = [
     {
       icon: <FaFeather />,
       title: 'Distraction-Free Writing',
@@ -59,20 +75,19 @@ export default function LandingPage() {
       description: 'Crafted for focus and comfort. Perfect for late-night sessions and sensitive eyes.',
     },
     {
-        icon: <GiDeathZone />,
-        title: 'Write or Die Mode',
-        description: 'Stay in the zone with our Write or Die mode. Keep writing or face the consequences!',
-      },
+      icon: <GiDeathZone />,
+      title: 'Write or Die Mode',
+      description: 'Stay in the zone with our Write or Die mode. Keep writing or face the consequences!',
+    },
     {
       icon: <IoStatsChartOutline />,
       title: 'Real-Time Stats',
-        description: 'Track your word count, writing speed, and session duration to stay motivated and on target.',
+      description: 'Track your word count, writing speed, and session duration to stay motivated and on target.',
     },
   ];
 
   return (
     <div className="min-h-screen flex flex-col">
-
       <header className="relative flex flex-col items-center justify-center text-center px-6 py-16 overflow-hidden">
         <div className="absolute inset-0 bg-radial-glow -z-10"></div>
         <div className="z-10 animate-[fadeIn_1s_ease-out]">
@@ -104,15 +119,13 @@ export default function LandingPage() {
             ))}
           </div>
         </Section>
-
       </main>
 
       <footer className="w-full text-center p-8 mt-auto border-t border-white/10">
         <p className="text-secondary text-sm">
-        Created with ❤️ by <a href="https://github.com/ObayM/">Obay</a> &copy; {new Date().getFullYear()}
+          Created with ❤️ by <a href="https://github.com/ObayM/">Obay</a> &copy; {new Date().getFullYear()}
         </p>
       </footer>
     </div>
   );
 }
-
