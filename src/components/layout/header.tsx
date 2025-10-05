@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import WordCount from "@/components/WordCount";
 import { IoCreateOutline } from "react-icons/io5";
+import Switch from "@/components/ui/Switch";
+
 type HeaderProps = {
   isTyping: boolean;
   wordCount: number;
   speed: number;
+  timer: number;
   handleReset: () => void;
 };
 
-export default function Header({ isTyping, wordCount, speed, handleReset }: HeaderProps) {
 
-
-
+export default function Header({ isTyping, wordCount, speed, timer, handleReset }: HeaderProps) {
   return (
     <motion.header
       className="absolute top-0 left-0 right-0 z-10 p-4"
@@ -30,10 +31,12 @@ export default function Header({ isTyping, wordCount, speed, handleReset }: Head
           Flow
         </h1>
 
-      <WordCount count={wordCount} speed={speed} />
+        <Switch isOn={true} handleToggle={() => {}} onColor="bg-green-500"  />
+        <WordCount count={wordCount} speed={speed} />
+        <span className="text-sm text-gray-500 dark:text-gray-400">{timer}s</span>
 
         <ThemeSwitcher />
-      <button className=" " onClick={handleReset}><IoCreateOutline /></button>
+        <button className=" " onClick={handleReset}><IoCreateOutline /></button>
       </div>
     </motion.header>
   );
