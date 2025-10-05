@@ -8,8 +8,35 @@ import useTypingSpeed from "@/hooks/useTypingSpeed";
 import Header from "@/components/layout/header";
 import { useTypingTimer } from "@/hooks/useTypingTimer";
 import WriteOrDieProgressBar from "@/components/WriteOrDieProgressBar";
+import { supabase } from "@/lib/supabase";
 
 const WritingFlowPage: FC = () => {
+  const [config, setConfig] = useState<{ preDelete: number; duration: number } | null>(null)
+
+  useEffect(() => {
+    async function fetchConfig() {
+      const { data, error } = await supabase
+        .from('configs')
+        .select('config_key, config_value')
+
+      if (error) {
+        console.error('Error fetching configs:', error)
+        return
+      }
+
+      const configMap: Record<string, any> = {}
+      data.forEach(row => {
+        configMap[row.config_key] = row.config_value
+      })
+
+      setConfig({
+        preDelete: configMap['write_or_die_pre_delete_time']?.seconds || 5,
+        duration: configMap['write_or_die_duration']?.seconds || 60,
+      })
+    }
+
+    fetchConfig()
+  }, [])
   const { text, wordCount, speed, isTyping, handleChange, handleReset } = useTypingSpeed();
   
   const { timer, handleTyping: handleTimerTyping, isActive } = useTypingTimer(10000);
@@ -17,25 +44,24 @@ const WritingFlowPage: FC = () => {
   const [writeOrDieMode, setWriteOrDieMode] = useState<boolean>(false);
 
   const handleWriteOrDieToggle = (): void => {
-    setWriteOrDieMode(prevMode => !prevMode);
+    setWriteOrDieMode(!writeOrDieMode);
   };
 
   useEffect(() => {
-    if (writeOrDieMode) {
-      
+    if (writeOrDieMode && config) {
       const timerId = setTimeout(() => {
         setWriteOrDieMode(false);
-      }, 0.5 * 60 * 1000);
+      }, config.duration * 1000);
 
       return () => clearTimeout(timerId);
     }
-  }, [writeOrDieMode]);
+  }, [writeOrDieMode, config]);
+
 
 
   useEffect(() => {
     if (writeOrDieMode && !isActive) {
       handleReset();
-      setWriteOrDieMode(false);
     }
   }, [isActive, writeOrDieMode, handleReset]);
 
@@ -48,7 +74,7 @@ const WritingFlowPage: FC = () => {
   return (
     <WritingContainer textLength={text.length}>
       <WriteOrDieProgressBar
-        duration={0.5 * 60} 
+        duration={config ? config.duration : 60} 
         height="4px"
         isRunning={writeOrDieMode}
         onComplete={() => { setWriteOrDieMode(false); }}
@@ -71,3 +97,4 @@ const WritingFlowPage: FC = () => {
 };
 
 export default WritingFlowPage;
+

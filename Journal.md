@@ -53,4 +53,4 @@ create table configs (
   updated_at timestamptz default now()
 );
 
-
+finally the writeOrDie mode is working perfectly fine and everything si going great and added suapbase 
