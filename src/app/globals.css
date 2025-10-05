@@ -1,3 +1,35 @@
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', sans-serif;
+
+    --color-background: 18 0% 7%;    
+    --color-surface: 30 0% 12%;      
+    --color-primary: 0 0% 88%;       
+    --color-secondary: 0 0% 63%;    
+    --color-headings: 0 0% 100%;   
+    --color-accent: 212 100% 50%;
+    --color-accent-hover: 212 100% 27%; 
+    --color-danger: 0 100% 60%;     
+  }
+}
+
+@theme {
+  --font-family-sans: var(--font-sans);
+
+  --color-bg-default: hsl(var(--color-background));
+  --color-bg-surface: hsl(var(--color-surface));
+
+  --color-text-primary: hsl(var(--color-primary));
+  --color-text-secondary: hsl(var(--color-secondary));
+  --color-text-headings: hsl(var(--color-headings));
+
+  --color-accent-default: hsl(var(--color-accent));
+  --color-accent-hover: hsl(var(--color-accent-hover));
+  --color-danger-default: hsl(var(--color-danger));
+}
+
+

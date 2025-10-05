@@ -23,3 +23,11 @@ okay now let's see i'll be doing something like a landing page , explaining the 
 
 it's working great now but need lots and lots of edits but it's not buggy at least
 
+---
+I tried to use tailwindcss theme but it really sucks i don't know why but i feel it's not great for me
+
+right now i am about to finish the landing page
+i am tirrble in  choosing colors but i hope that everything works
+
+it's pretty much done
+
