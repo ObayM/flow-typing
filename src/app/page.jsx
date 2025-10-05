@@ -20,23 +20,11 @@ const WritingFlowPage = () => {
     setWriteOrDieMode(!writeOrDieMode);
   };
 
-
-  useEffect(() => {
-    if (writeOrDieMode) {
-      const timer = setTimeout(() => {
-        setWriteOrDieMode(false);
-      }, .5 * 60 * 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [writeOrDieMode]); 
-
   useEffect(() => {
     if (writeOrDieMode && !isActive) {
       handleReset();
     }
   }, [isActive, writeOrDieMode, handleReset]);
-
 
 
   const handleTextChange = (e) => {
@@ -49,11 +37,9 @@ const WritingFlowPage = () => {
     <WritingContainer textLength={text.length}>
           <WriteOrDieProgressBar
       duration={.5*60}
-      height="6px"
-      showTime={true}
-      StartOn={writeOrDieMode}
-      StopOn={!writeOrDieMode}
-     
+      height="4px"
+      isRunning={writeOrDieMode}
+      onComplete={() => { setWriteOrDieMode(false); }}
     />
       <Header
         isTyping={isTyping}
@@ -74,3 +60,5 @@ const WritingFlowPage = () => {
 };
 
 export default WritingFlowPage;
+
+
