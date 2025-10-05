@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import WordCount from "@/components/WordCount";
 import { IoCreateOutline } from "react-icons/io5";
-import Switch from "@/components/ui/Switch";
 
 type HeaderProps = {
   isTyping: boolean;

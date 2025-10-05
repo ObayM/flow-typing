@@ -33,3 +33,24 @@ it's pretty much done
 
 okay now i'll be working on converting all of this js to ts and i'll try to move and organize things as i think it's pretty bad here
 
+i think i got a cool feature which is saving the text to local storage , also i need to setup supabase too so i can save to it the config for like write or die and the other defaults i think that would be perfect
+
+okay here i will write the db schema for supabase
+so i need a config table
+which it's job to manage all of the constants like localstorage key but why i will need to change this i think i'll keep it out
+
+anyway we will need to save
+- time before deleting the text in the WriteOrDie mode 
+- time for the writeordie mode itself like how long
+
+so okay that won't be a column it would be just config_id, config_key, config_value
+
+create table configs (
+  config_id uuid primary key default gen_random_uuid(),
+  config_key text unique not null,
+  config_value jsonb not null,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+
