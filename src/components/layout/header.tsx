@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
-import WordCount from "@/components/WordCount";
 import { IoCreateOutline } from "react-icons/io5";
+import { FiSettings } from "react-icons/fi";
 
 type HeaderProps = {
   isTyping: boolean;
@@ -13,11 +13,13 @@ type HeaderProps = {
   handleReset: () => void;
   handleWriteOrDieToggle: () => void;
   writeOrDieMode: boolean;
+  setIsModalOpen: (isOpen: boolean) => void;
+
 };
 
 
 
-export default function Header({ isTyping, wordCount, speed, timer, handleReset, handleWriteOrDieToggle, writeOrDieMode}: HeaderProps) {
+export default function Header({ isTyping, timer, handleReset, handleWriteOrDieToggle, writeOrDieMode, setIsModalOpen}: HeaderProps) {
   return (
     <motion.header
       className="absolute top-0 left-0 right-0 z-10 p-4"
@@ -41,7 +43,9 @@ export default function Header({ isTyping, wordCount, speed, timer, handleReset,
 
         </button>
         <span className="text-sm text-gray-500 dark:text-gray-400">{timer}s</span>
-        
+      <button className="cursor-pointer p-2 bg-gray-800 text-center rounded" onClick={() => setIsModalOpen(true)}>
+                <FiSettings className="mr-2" />
+      </button>
         <ThemeSwitcher />
         <button className=" " onClick={handleReset}><IoCreateOutline /></button>
       </div>

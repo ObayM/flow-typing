@@ -2,13 +2,19 @@
 
 It's an app designed to motivate you to type as much as you can and to enter the flow state, where you write directly from your brain without delay.
 
+Make sure to visit: [Flow Typing](https://flow-typing.vercel.app/)
+
 I used:
 - Next.js  
 - Tailwind CSS  
 - Framer Motion  
 - next-themes  
 
-This app is still in progress and not in its final state, but you can take a look.
+### Features
+- Write Or Die: When activated, if you stopped for 10s you will lose all of your prorgress so be careful:
+- Minimal Design: the design is miniaml so you can focus only on coding
+- /info page: this will help you understand more about the project
+
 
 ### How to run the project
 
