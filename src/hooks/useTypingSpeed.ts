@@ -47,19 +47,26 @@ const useTypingSpeed = (): UseTypingSpeedReturn => {
 
     const currentTime = Date.now();
 
+    // Set start time on first keystroke only
     if (startTime === 0 && value.length > 0) {
       setStartTime(currentTime);
+      // Don't calculate speed on the very first keystroke
+      const currentWordCount = value.trim() === "" ? 0 : value.trim().split(/\s+/).length;
+      setWordCount(currentWordCount);
+      setSpeed(0);
+      return;
     }
 
     const currentWordCount = value.trim() === "" ? 0 : value.trim().split(/\s+/).length;
     setWordCount(currentWordCount);
     
-    const effectiveStartTime = startTime || currentTime;
-    const timeElapsedInMinutes = (currentTime - effectiveStartTime) / (1000 * 60);
+    const timeElapsedInMinutes = (currentTime - startTime) / (1000 * 60);
 
-    if (timeElapsedInMinutes > 0) {
+    // Only show WPM after at least 1 second of typing to avoid wild spikes
+    if (timeElapsedInMinutes > 0.0167) {
       const wpm = Math.round(currentWordCount / timeElapsedInMinutes);
-      setSpeed(wpm);
+      // Cap WPM at a reasonable maximum to prevent display issues
+      setSpeed(Math.min(wpm, 300));
     } else {
       setSpeed(0); 
     }
@@ -83,4 +90,3 @@ const useTypingSpeed = (): UseTypingSpeedReturn => {
 };
 
 export default useTypingSpeed;
-

@@ -4,32 +4,563 @@
 
 @layer base {
   :root {
-    --font-sans: 'Inter', sans-serif;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
-    --color-background: 18 0% 7%;    
-    --color-surface: 30 0% 12%;      
-    --color-primary: 0 0% 88%;       
-    --color-secondary: 0 0% 63%;    
-    --color-headings: 0 0% 100%;   
-    --color-accent: 212 100% 50%;
-    --color-accent-hover: 212 100% 27%; 
-    --color-danger: 0 100% 60%;     
+    --color-bg: #1a1a2e;
+    --color-bg-surface: #16213e;
+    --color-text-main: #d1d0c5;
+    --color-text-sub: #646669;
+    --color-text-extra: #2c2e31;
+    --color-primary: #e2b714;
+    --color-error: #ca4754;
+    --color-caret: #e2b714;
+  }
+
+  .light {
+    --color-bg: #f5f5f5;
+    --color-bg-surface: #e8e8e8;
+    --color-text-main: #323437;
+    --color-text-sub: #646669;
+    --color-text-extra: #d1d0c5;
+    --color-primary: #e2b714;
+    --color-error: #ca4754;
+    --color-caret: #e2b714;
   }
 }
 
 @theme {
   --font-family-sans: var(--font-sans);
+  --font-family-mono: var(--font-mono);
 
-  --color-bg-default: hsl(var(--color-background));
-  --color-bg-surface: hsl(var(--color-surface));
-
-  --color-text-primary: hsl(var(--color-primary));
-  --color-text-secondary: hsl(var(--color-secondary));
-  --color-text-headings: hsl(var(--color-headings));
-
-  --color-accent-default: hsl(var(--color-accent));
-  --color-accent-hover: hsl(var(--color-accent-hover));
-  --color-danger-default: hsl(var(--color-danger));
+  --color-bg-default: var(--color-bg);
+  --color-bg-surface: var(--color-bg-surface);
+  --color-text-primary: var(--color-text-main);
+  --color-text-secondary: var(--color-text-sub);
+  --color-text-headings: var(--color-text-main);
+  --color-accent-default: var(--color-primary);
+  --color-accent-hover: var(--color-primary);
+  --color-danger-default: var(--color-error);
 }
 
+/* ============================================
+   GLOBAL BASE
+   ============================================ */
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+/* ============================================
+   TYPING AREA
+   ============================================ */
+
+.typing-area {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  line-height: 2.2;
+  color: var(--color-text-main);
+  caret-color: transparent;
+  outline: none;
+  border: none;
+  background: transparent;
+  resize: none;
+  width: 100%;
+  min-height: 60vh;
+  padding: 0;
+  letter-spacing: 0.01em;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.typing-area::placeholder {
+  color: var(--color-text-sub);
+  opacity: 0.4;
+  font-style: normal;
+}
+
+.typing-area:focus {
+  outline: none;
+}
+
+/* ============================================
+   CUSTOM CARET
+   ============================================ */
+
+.custom-caret {
+  position: absolute;
+  width: 2.5px;
+  height: 1.7em;
+  background-color: var(--color-caret);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: left 0.1s cubic-bezier(0.22, 0.68, 0, 1), top 0.1s cubic-bezier(0.22, 0.68, 0, 1);
+  z-index: 10;
+  will-change: left, top;
+}
+
+.custom-caret.blink {
+  animation: caretBlink 1s ease-in-out infinite;
+}
+
+@keyframes caretBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.custom-caret.pulse {
+  animation: caretPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes caretPulse {
+  0%, 100% {
+    opacity: 1;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--color-caret) 50%, transparent);
+  }
+  50% {
+    opacity: 0.2;
+    box-shadow: none;
+  }
+}
+
+/* ============================================
+   LAYOUT CONTAINERS
+   ============================================ */
+
+.flow-container {
+  position: relative;
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.writing-wrapper {
+  position: relative;
+  overflow: hidden;
+  height: calc(100vh - 60px);
+  margin-top: 60px;
+}
+
+.writing-scroll-container {
+  position: relative;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-top: 20vh;
+  padding-bottom: 50vh;
+}
+
+.writing-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.flow-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-sub) 8%, transparent);
+}
+
+.flow-header.faded {
+  opacity: 0.12;
+  transform: translateY(-2px);
+}
+
+.flow-header:hover {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 52rem;
+}
+
+.header-logo {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.03em;
+  user-select: none;
+}
+
+/* ============================================
+   STATS BAR
+   ============================================ */
+
+.stats-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--color-text-sub) 8%, transparent);
+}
+
+.stats-bar.faded {
+  opacity: 0.12;
+  transform: translateY(2px);
+}
+
+.stats-bar:hover {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+.stats-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 52rem;
+  gap: 3rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.stat-value {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 400;
+  color: var(--color-text-sub);
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   HEADER BUTTONS
+   ============================================ */
+
+.header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-sub);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.header-btn:hover {
+  color: var(--color-text-main);
+  background: color-mix(in srgb, var(--color-text-sub) 10%, transparent);
+}
+
+.header-btn.active {
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.header-btn-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   PROGRESS BAR
+   ============================================ */
+
+.progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 100;
+  background: transparent;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 0 2px 2px 0;
+  transition: width 0.05s linear;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--color-primary) 50%, transparent);
+}
+
+/* ============================================
+   MODAL
+   ============================================ */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-card {
+  background: var(--color-bg);
+  border: 1px solid color-mix(in srgb, var(--color-text-sub) 15%, transparent);
+  border-radius: 1rem;
+  width: 100%;
+  max-width: 26rem;
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text-sub) 10%, transparent);
+}
+
+.modal-title {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-text-sub) 10%, transparent);
+}
+
+/* ============================================
+   SLIDERS
+   ============================================ */
+
+.setting-slider {
+  margin-bottom: 1.5rem;
+}
+
+.setting-slider:last-child {
+  margin-bottom: 0;
+}
+
+.setting-slider label {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-main);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.setting-slider .value-badge {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  color: var(--color-primary);
+  border-radius: 0.25rem;
+}
+
+.setting-slider .description {
+  font-size: 0.68rem;
+  color: var(--color-text-sub);
+  margin-bottom: 0.6rem;
+  font-family: var(--font-mono);
+}
+
+.setting-slider input[type="range"] {
+  width: 100%;
+  height: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: color-mix(in srgb, var(--color-text-sub) 20%, transparent);
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+}
+
+.setting-slider input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.setting-slider input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.btn-primary {
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  border: none;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--color-text-sub) 20%, transparent);
+  background: transparent;
+  color: var(--color-text-sub);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  color: var(--color-text-main);
+  border-color: color-mix(in srgb, var(--color-text-sub) 40%, transparent);
+}
+
+/* ============================================
+   FOCUS MODE — hides chrome when typing
+   ============================================ */
+
+.focus-mode .flow-header {
+  opacity: 0.08;
+}
+
+.focus-mode .stats-bar {
+  opacity: 0.08;
+}
+
+/* ============================================
+   BACKGROUND
+   ============================================ */
+
+.bg-gradient {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    color-mix(in srgb, var(--color-primary) 2%, var(--color-bg)),
+    var(--color-bg) 70%
+  );
+  transition: background 1.5s ease;
+}
+
+.bg-gradient.active {
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    color-mix(in srgb, var(--color-primary) 5%, var(--color-bg)),
+    var(--color-bg) 70%
+  );
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
